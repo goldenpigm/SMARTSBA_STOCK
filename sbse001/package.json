@@ -7,6 +7,11 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
   },
+  "dependencies": {
+    "@progress/kendo-dateinputs-vue-wrapper": "latest",
+    "@progress/kendo-ui": "latest"
+  },
+  "description": "Example usage of Kendo UI for Vue\nSee [https://www.telerik.com/kendo-vue-ui/components/dateinputs-wrapper/datepicker/](https://www.telerik.com/kendo-vue-ui/components/dateinputs-wrapper/datepicker/)",
   "devDependencies": {
     "@nuxt/types": "^2.16.0",
     "@progress/kendo-data-query": "^1.6.0",

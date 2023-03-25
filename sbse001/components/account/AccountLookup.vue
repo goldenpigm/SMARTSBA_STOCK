@@ -34,7 +34,6 @@
             :class="`form-control account ${requiredValue}`" 
             :data-items="lookupAcc" 
             :text-field="'account'" 
-            :data-item-key="'account'"
             :value-field="'account'"
             :value-primitive="true"
             :allow-custom="true"
@@ -45,8 +44,8 @@
             @change="onChange"
             >
           </ComboBox>
-          <small  v-if="accountError" :id="`${tagid}HelpText`" :data-for="`${tagid}`"
-            class="form-text text-muted errText">require</small>
+          <small  v-if="errorTextFlag.account" :id="`${tagid}HelpText`" :data-for="`${tagid}`"
+            class="form-text text-muted errText">{{ errorText.account }}</small>
         </div>
           <div v-show="showCustname" :class="`form-group ${custnameClass}`">
             <input :name="`${custnameId}`" :id="`${custnameId}`" type="text" readonly :for="`${tagid}`"
@@ -161,8 +160,12 @@ export default {
         account: '',
         custname: ''
       },
-      accountError: false,
-
+      errorTextFlag: {
+        account: false,
+      },
+      errorText: {
+        account: '',
+      },
       requiredValue: '',
       customTitleBar: 'accModalTitleBar',
       visibleAccDialog: false
@@ -180,8 +183,8 @@ export default {
 
   },
   methods: {
-    queryLookupAccount() {
-      axios.post(`${this.baseURLUtil}/lookupaccount/collect`, this.data, this.headers)
+    async queryLookupAccount() {
+      await axios.post(`${this.baseURLUtil}/lookupaccount/collect`, this.data, this.headers)
         .then((result) => {
           console.log("SUCCESS : lookupaccount");
           if (result.data.body.result == "Y") {
@@ -237,6 +240,7 @@ export default {
     onChange (event) {
       if (event.value == null) {
         this.accountDetail.custname = '';
+        this.$emit('claerAccountDetail');
       }
       this.accountDetail.account = event.value;
     },
@@ -251,6 +255,9 @@ export default {
       // }
     },
   },
+  wathch: {
+    
+  }
 }
 </script>
 

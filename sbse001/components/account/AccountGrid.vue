@@ -1,7 +1,7 @@
 <template>
   <div>
     <Grid 
-      :style="{ height: '500px' }" 
+      :style="{ height: '500px', margin: '0.75rem 2rem' }"
       :sortable="true"
       :reorderable="true"
       :filter="filter"
@@ -18,9 +18,9 @@
       :loader="loader"
       >
       <GridToolbar>
-          <span class='k-textbox k-grid-search k-display-flex'>
+          <span class='k-textbox k-grid-search k-display-flex searchbar'>
             <Input
-              :style="{ width: '230px' }"
+              :style="{ width: '230px', height: 'auto', border: 'none' }"
               :placeholder="'Search'"
               :value="searchWord"
               @input="onFilter"
@@ -127,3 +127,10 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.searchbar {
+  margin-left: auto;
+  margin-right: 0;
+}
+</style>

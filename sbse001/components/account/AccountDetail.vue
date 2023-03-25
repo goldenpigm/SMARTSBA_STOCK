@@ -23,7 +23,8 @@
                     :accLookuptype="'P'" 
                     :showAccLookuptype="true"
                     @setAccountValue="setAccountValue"
-                    />
+                    @claerAccountDetail="claerAccountDetail"
+                  />
                 </div>
               </div>
               <div class="col-sm-12 col-md-4 col-lg-4 px-0">
@@ -35,14 +36,14 @@
                       :name="'depository_account'"
                       :placeholder="'Depository Account'"
                       :data-items="lookupDepAcc" 
-                      :text-field="'dpaccount'"
+                      :text-field="depAccValue"
+                      :value-field="depAccValue"
+                      :value-primitive="true"
                       :value="depInfo.depacc"
                       @change="onDepAccChange"
-                    >
-
-                    </ComboBox>
+                    />
                   <small v-show="errorTextFlag.depacc" id="depository_accountHelpText" data-for="depository_account"
-                    class="form-text text-muted errText">require</small>
+                    class="form-text text-muted errText">{{ errorText.depacc }}</small>
                 </div>
               </div>
               <div class="col-sm-12 col-md-4 col-lg-4">
@@ -62,12 +63,12 @@
                 </div>
               </div>
               <div class="col-sm-12 col-md-4 col-lg-4">
-                <div class="form-group">
+                <div class="form-group col-sm-12 col-md-6 col-lg-6 px-0">
                   <label id="prefixdesc_label" for="prefixdesc" class="require">คำนำหน้า / Prefix Desc.</label>
-                  <input name="prefixdesc" id="prefixdesc" readonly placeholder="N/A" class="form-control read-only"
+                  <input name="prefixdesc" id="prefixdesc" placeholder="N/A" :class="`form-control ${prefixcodeEditFlag}`"
                     :value="depInfo.prefixdesc" required>
                   <small v-show="errorTextFlag.prefixdesc" id="prefix_descHelpText" data-for="prefix_desc"
-                    class="form-text text-muted errText">require</small>
+                    class="form-text text-muted errText">{{ errorText.prefixdesc }}</small>
                 </div>
               </div>
               <div class="col-sm-12 col-md-4 col-lg-4">
@@ -121,6 +122,12 @@ export default {
         depacc: false,
         prefixdesc: false
       },
+      errorText: {
+        depacc: '',
+        prefixdesc: ''
+      },
+      depAccValue: '',
+      prefixcodeEditFlag: 'read-only',
 
       lookupDepAcc: [],
       
@@ -129,17 +136,38 @@ export default {
   mounted() {
   },
   computed: {
-
   },
   methods: {
     setAccountValue(account) {
       this.depInfo.account = account;
-      this.queryLookupDepAcc();
+      this.queryAccDetail();
     },
     onDepAccChange (event) {
       this.depInfo.depacc = event.value;
     },
-    queryLookupDepAcc() {
+    setAccountDetail(result) {
+      if (result.USEOMNIBUS == '1') {
+        this.depAccValue = 'sdcsubmember';
+        this.queryLookupDepAcc(result.pcflag);
+      } else {
+        this.depAccValue = 'dpaccount';
+        this.lookupDepAcc = [
+          {
+            'dpaccount': result.dpaccount
+          }
+        ];
+        this.depInfo.depacc = result.dpaccount;
+      }
+      this.depInfo.cardid = result.cardid;
+      this.depInfo.prefixcode = result.titlecode;
+      this.depInfo.prefixdesc = result.titlename;
+      this.depInfo.custname = result.custname;
+
+      if (result.titlename == 'อื่น ๆ') {
+        this.prefixcodeEditFlag = '';
+      }
+    },
+    queryAccDetail() {
       let data = {
         'account': this.depInfo.account
       }
@@ -147,18 +175,8 @@ export default {
         .then((result) => {
           console.log("SUCCESS : inqstkaccdetail");
           if (result.data.body.result == "Y") {
-            // this.lookupDepAcc = result.data.body.lists;
-            // console.log(this.lookupDepAcc);
             console.log(result.data.body);
-            this.depInfo.depacc = result.data.body.dpaccount;
-            this.depInfo.cardid = result.data.body.cardid;
-            this.depInfo.prefixcode = result.data.body.titlecode;
-            this.depInfo.prefixdesc = result.data.body.titlename;
-            this.depInfo.custname = result.data.body.custname;
-
-            if (result.data.body.titlename == 'อื่น ๆ') {
-
-            }
+            this.setAccountDetail(result.data.body);
           }
         })
         .catch((error) => {
@@ -166,6 +184,31 @@ export default {
           console.error('Request canceled', error);
         });
     },
+    queryLookupDepAcc(pcflag) {
+      let data = {
+        'pcflag': pcflag
+      }
+      axios.post(`${this.baseURLStock}/lookupdepacct/lookup`, data, this.headers)
+        .then((result) => {
+          console.log("SUCCESS : lookupdepacct");
+          if (result.data.body.result == "Y") {
+            console.log(result.data.body.lists);
+            this.lookupDepAcc = result.data.body.lists;
+          }
+        })
+        .catch((error) => {
+          console.log("ERROR : lookupdepacct");
+          console.error('Request canceled', error);
+        });
+    },
+    claerAccountDetail() {
+      this.lookupDepAcc = []
+      this.depInfo.cardid = '';
+      this.depInfo.prefixcode = '';
+      this.depInfo.prefixdesc = '';
+      this.depInfo.custname = '';
+      this.prefixcodeEditFlag = 'read-only';
+    }
   },
 }
 </script>

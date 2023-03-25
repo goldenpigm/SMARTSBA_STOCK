@@ -14,9 +14,11 @@ export default {
         { name: "fsprogname", content: "Customer Stock Deposit" },
         { name: "fsprogversion", content: "$TAGVERSION$" },
       ],
-      //   script: [
-      //     { src: "https://awesome-lib.js" },
-      //   ],
+      script: [
+        { src: "https://code.jquery.com/jquery-1.12.3.min.js" },
+        { src: "https://kendo.cdn.telerik.com/2022.3.913/js/jszip.min.js" },
+        { src: "https://kendo.cdn.telerik.com/2022.3.913/js/kendo.all.min.js" },
+      ],
       //   style: [{ '@/assets/css/main.css' }],
       link: [
         {
@@ -26,6 +28,17 @@ export default {
         {
           rel: "stylesheet",
           href: "https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.2.0/mdb.min.css",
+        },
+        {
+          rel: "stylesheet",
+          href: "https://kendo.cdn.telerik.com/themes/6.2.0/default/default-ocean-blue.css",
+        },
+        {
+          rel: "stylesheet",
+          href: "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css",
+          integrity:
+            "sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T",
+          crossorigin: "anonymous",
         },
       ],
     },
@@ -46,9 +59,19 @@ export default {
   },
   runtimeConfig: {
     public: {
-      BASE_URL_UTIL: process.env.BASE_URL_UTIL || "https://dsmartsbaws.freewillsolutions.com/api/util/smartfresh",
-      BASE_URL_STOCK: process.env.BASE_URL_STOCK || "https://dsmartsbaws.freewillsolutions.com/api/stock/smartfresh",
-      FS_LANG: process.env.FS_LANG || "TH"
-    }
-  }
+      BASE_URL_UTIL:
+        process.env.BASE_URL_UTIL ||
+        "https://dsmartsbaws.freewillsolutions.com/api/util/smartfresh",
+      BASE_URL_STOCK:
+        process.env.BASE_URL_STOCK ||
+        "https://dsmartsbaws.freewillsolutions.com/api/stock/smartfresh",
+      BASE_URL_CASH:
+        process.env.BASE_URL_CASH ||
+        "https://dsmartsbaws.freewillsolutions.com/api/cash/smartfresh",
+      BASE_URL_CA:
+        process.env.BASE_URL_CA ||
+        "https://dsmartsbaws.freewillsolutions.com/api/ca/smartfresh",
+      FS_LANG: process.env.FS_LANG || "TH",
+    },
+  },
 };
