@@ -3,7 +3,7 @@
     <label id="xdate_label" for="xdate">X Date</label>
     <DatePicker 
       :id="'xdate'" 
-      :value="currentDate" 
+      :value="xdateValue" 
       :format="'dd/MM/yyyy'" 
       
       :disable-dates="disableDates"
@@ -52,8 +52,7 @@ export default {
       },
 
       holidayLists: [],
-      currentDate: new Date(),
-      value: null,
+      xdateValue: new Date(), // current
     }
   },
   mounted() {
@@ -104,11 +103,7 @@ export default {
       return false;
     },
     onChange(event) {
-      this.$refs.xdate.value == event.value
-      console.log(this);
-      console.log(event);
-      console.log(this.value);
-      console.log(this.$refs.xdate.value);
+      this.xdateValue = event.sender.value();
     },
   }
 }

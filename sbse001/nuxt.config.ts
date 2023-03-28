@@ -20,25 +20,24 @@ export default {
         { src: "https://kendo.cdn.telerik.com/2022.3.913/js/kendo.all.min.js" },
       ],
       //   style: [{ '@/assets/css/main.css' }],
+      // link: [
+      //   {
+      //     rel: "stylesheet",
+      //     href: "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css",
+      //   },
+      //   {
+      //     rel: "stylesheet",
+      //     href: "https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.2.0/mdb.min.css",
+      //   },
+      // ],
       link: [
         {
           rel: "stylesheet",
-          href: "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css",
+          href: "https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900&display=swap",
         },
         {
           rel: "stylesheet",
-          href: "https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.2.0/mdb.min.css",
-        },
-        {
-          rel: "stylesheet",
-          href: "https://kendo.cdn.telerik.com/themes/6.2.0/default/default-ocean-blue.css",
-        },
-        {
-          rel: "stylesheet",
-          href: "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css",
-          integrity:
-            "sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T",
-          crossorigin: "anonymous",
+          href: "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css",
         },
       ],
     },
@@ -47,6 +46,7 @@ export default {
   //   strict: true,
   // },
   css: [
+    "~/assets/scss/mdb5.scss",
     "@progress/kendo-theme-default/dist/all.css",
     "@/assets/css/item-std.css",
     "@/assets/css/custom-style.css",

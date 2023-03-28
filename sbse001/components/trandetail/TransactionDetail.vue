@@ -29,11 +29,7 @@
                 </div>
               </div>
               <div class="col-sm-12 col-md-4 col-lg-4">
-                <div class="form-group">
-                  <label id="purpose_label" for="purpose" class="require">Purpose</label>
-                  <input name="purpose" id="purpose" value="" placeholder="Purpose" required />
-                  <small id="purposetHelpText" data-for="purpose" class="form-text text-muted errText">require</small>
-                </div>
+                <PurposeLookup :purposeClass="'col-sm-12 col-md-6 col-lg-6 px-0'"></PurposeLookup>
               </div>
             </div>
             <div class="row">
@@ -124,12 +120,14 @@
 </template>
 
 <script>
-import XDate from "../xdate/XDate"
+import XDate from "../XDate"
+import PurposeLookup from "../PurposeLookup"
 
 export default {
   name: 'TransactionDetail',
   components: {
     XDate,
+    PurposeLookup,
   },
 }
 </script>
