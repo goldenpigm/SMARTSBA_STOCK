@@ -1,35 +1,13 @@
 <template>
   <div class="form-group" :class="purposeClass">
     <label id="purpose_label" for="purpose" class="require">Purpose</label>
-    <ComboBox
-      :id="'purpose'"
-      :placeholder="'Purpose'"
-      :class="`form-control require`"
+    <DropDownList
       :data-items="lookupPurpose"
       :text-field="'purposeename'"
-      :value-field="'purposecode'"
-      :value="purposeValue"
-      
-      :allow-custom="true"
-      :item-render="customRender"
+      :default-item="defaultItem"
       @change="onChange"
-    >
-      <!-- <template v-slot:purposeRender="{ }">
-        <li class="k-item">
-          <span>
-            {{ this.lookupPurpose.purposeename }}
-          </span>
-        </li>
-      </template> -->
-      <template v-slot:purposeRender="{ props }">
-        <purposeRender
-          :class="props.itemClass"
-          :data-item="props.dataItem"
-          :index="props.index"
-          @click="(event) => props.onClick(event)"
-        />
-      </template>
-    </ComboBox>
+      >
+    </DropDownList>
     <small
       id="purposetHelpText"
       data-for="purpose"
@@ -41,14 +19,12 @@
 
 <script>
 import axios from "axios";
-import { ComboBox } from "@progress/kendo-vue-dropdowns";
-import purposeRender from "./purposeRender";
+import { DropDownList } from "@progress/kendo-vue-dropdowns";
 
 export default {
   name: "PurposeLookup",
   components: {
-    ComboBox,
-    purposeRender,
+    DropDownList,
   },
   props: {
     purposeClass: {
@@ -73,6 +49,11 @@ export default {
         type: this.accLookuptype,
       },
       lookupPurpose: [],
+      defaultItem: { 
+        purposeename: 'Choose one of the following',
+        purposetname: 'Choose one of the following',
+        purposecode: '',
+      },
       customRender: "purposeRender",
 
       purposeValue: "",
@@ -104,10 +85,8 @@ export default {
       return this.lookupPurpose;
     },
     onChange(event) {
-      this.purposeValue = event.target.value;
-      this.purposeTextField = event.target.value.purposecode + ' : ' + event.target.value.purposeename;
-      console.log(this.purposeValue);
-      console.log(this.purposeTextField);
+      console.log(event);
+      this.purposeValue = event.value;
     },
   },
 };

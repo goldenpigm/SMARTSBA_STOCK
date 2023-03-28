@@ -300,6 +300,7 @@ export default {
       this.$emit("setAccountValue", this.accountDetail.account);
     },
     onChange(event) {
+      // console.log('onChange', event);
       if (event.value == null) {
         this.accountDetail.custname = "";
         this.$emit("claerAccountDetail");

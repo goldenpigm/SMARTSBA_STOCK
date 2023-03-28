@@ -51,7 +51,7 @@ export default {
     "@/assets/css/item-std.css",
     "@/assets/css/custom-style.css",
     "@/assets/css/program_style.css",
-    "@/assets/css/sba.style.css",
+    // "@/assets/css/sba.style.css",
     "@/assets/sbse001.css",
   ],
   build: {

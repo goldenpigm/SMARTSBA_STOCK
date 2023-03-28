@@ -13,7 +13,7 @@
                   <span id="infosubprog" data-for="AboutProgram" class="nav-item dropdown"></span>
                 </h6>
                 <div class="content p-4 container">
-                  <AccountDetail />
+                  <AccountDetail :title="'ข้อมูลเลขที่บัญชีหลักทรัพย์ผู้ฝาก / Depositor’s Information'" @account-detail-value="accountDetailValue"/>
                   <TransactionDetail />
                   <div id="CertificateDetail">
                     <div id="detail" class="container keyform-section">
@@ -84,6 +84,9 @@ export default {
     // this.depAccount("000004-1");
   },
   methods: {
+    accountDetailValue(depAccValue) {
+      console.log('accountDetailValue', depAccValue);
+    }
     // depAccount(account) {
     //   const data = {
     //     "account": account

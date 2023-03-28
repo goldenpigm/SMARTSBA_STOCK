@@ -5,7 +5,7 @@
         <div class="col-xs-12 col-sm-12 col-lg-12 p-1 pr-2">
           <div class="portlet light bordered h-100">
             <div class="container section">
-              <div class="title-row">ข้อมูลเลขที่บัญชีหลักทรัพย์ผู้ฝาก / Depositor’s Information</div>
+              <div class="title-row">{{ title }}</div>
             </div>
             <div class="row">
               <div class="col-sm-12 col-md-4 col-lg-4 px-0">
@@ -40,6 +40,7 @@
                       :value-field="depAccValue"
                       :value-primitive="true"
                       :value="depInfo.depacc"
+                      :disabled="depAccReadOnly"
                       @change="onDepAccChange"
                     />
                   <small v-show="errorTextFlag.depacc" id="depository_accountHelpText" data-for="depository_account"
@@ -65,7 +66,7 @@
               <div class="col-sm-12 col-md-4 col-lg-4">
                 <div class="form-group col-sm-12 col-md-6 col-lg-6 px-0">
                   <label id="prefixdesc_label" for="prefixdesc" class="require">คำนำหน้า / Prefix Desc.</label>
-                  <input name="prefixdesc" id="prefixdesc" placeholder="N/A" :class="`form-control ${prefixcodeEditFlag}`"
+                  <input name="prefixdesc" id="prefixdesc" placeholder="N/A" class="form-control" :class="{ 'read-only' : prefixcodeEditFlag }"
                     :value="depInfo.prefixdesc" required>
                   <small v-show="errorTextFlag.prefixdesc" id="prefix_descHelpText" data-for="prefix_desc"
                     class="form-text text-muted errText">{{ errorText.prefixdesc }}</small>
@@ -97,6 +98,13 @@ export default {
     AccountLookup,
     ComboBox
   },
+  props: {
+    title: {
+      type: String,
+      required: true,
+      readonly: true,
+    },
+  },
   data() {
     return {
       fsLang: useRuntimeConfig().public.FS_LANG,
@@ -127,7 +135,8 @@ export default {
         prefixdesc: ''
       },
       depAccValue: '',
-      prefixcodeEditFlag: 'read-only',
+      prefixcodeEditFlag: true,
+      depAccReadOnly: false,
 
       lookupDepAcc: [],
       
@@ -147,9 +156,11 @@ export default {
     },
     setAccountDetail(result) {
       if (result.USEOMNIBUS == '1') {
+        this.depAccReadOnly = false;
         this.depAccValue = 'sdcsubmember';
         this.queryLookupDepAcc(result.pcflag);
       } else {
+        this.depAccReadOnly = true;
         this.depAccValue = 'dpaccount';
         this.lookupDepAcc = [
           {
@@ -164,8 +175,10 @@ export default {
       this.depInfo.custname = result.custname;
 
       if (result.titlename == 'อื่น ๆ') {
-        this.prefixcodeEditFlag = '';
+        this.prefixcodeEditFlag = false;
       }
+
+      this.$emit('account-detail-value', this.depInfo);
     },
     queryAccDetail() {
       let data = {
@@ -175,8 +188,9 @@ export default {
         .then((result) => {
           console.log("SUCCESS : inqstkaccdetail");
           if (result.data.body.result == "Y") {
-            console.log(result.data.body);
             this.setAccountDetail(result.data.body);
+          } else {
+            this.claerAccountDetail();
           }
         })
         .catch((error) => {
@@ -192,7 +206,6 @@ export default {
         .then((result) => {
           console.log("SUCCESS : lookupdepacct");
           if (result.data.body.result == "Y") {
-            console.log(result.data.body.lists);
             this.lookupDepAcc = result.data.body.lists;
           }
         })
@@ -203,11 +216,15 @@ export default {
     },
     claerAccountDetail() {
       this.lookupDepAcc = []
+      this.depInfo.account = '';
+      this.depInfo.depacc = '';
       this.depInfo.cardid = '';
       this.depInfo.prefixcode = '';
       this.depInfo.prefixdesc = '';
       this.depInfo.custname = '';
       this.prefixcodeEditFlag = 'read-only';
+      this.depAccReadOnly = false;
+      this.$emit('account-detail-value', this.depInfo);
     }
   },
 }
