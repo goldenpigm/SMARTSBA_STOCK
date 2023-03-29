@@ -5,7 +5,6 @@
       :id="'xdate'" 
       :value="xdateValue" 
       :format="'dd/MM/yyyy'" 
-      
       :disable-dates="disableDates"
       :footer="false" 
       @change="onChange"
@@ -32,7 +31,7 @@ export default {
   data() {
     return {
       fsLang: useRuntimeConfig().public.FS_LANG,
-      baseURLCash: useRuntimeConfig().public.BASE_URL_CASH,
+      baseURLUtil: useRuntimeConfig().public.BASE_URL_UTIL,
       headers: {
         headers: {
           "Content-Type": "application/json",
@@ -70,7 +69,7 @@ export default {
         'from_date': '',
         'to_date': ''
       }
-      await axios.post(`${this.baseURLCash}/lookupcalendar/collect`, data, this.headers)
+      await axios.post(`${this.baseURLUtil}/lookupcalendar/collect`, data, this.headers)
         .then((result) => {
           console.log("SUCCESS : lookupcalendar");
           if (result.data.body.result == "Y") {
@@ -104,6 +103,7 @@ export default {
     },
     onChange(event) {
       this.xdateValue = event.sender.value();
+      this.$emit('xdate-value', this.xdateValue);
     },
   }
 }

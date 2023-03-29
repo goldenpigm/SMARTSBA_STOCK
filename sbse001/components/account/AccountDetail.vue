@@ -136,7 +136,7 @@ export default {
       },
       depAccValue: '',
       prefixcodeEditFlag: true,
-      depAccReadOnly: false,
+      depAccReadOnly: true,
 
       lookupDepAcc: [],
       
@@ -223,7 +223,7 @@ export default {
       this.depInfo.prefixdesc = '';
       this.depInfo.custname = '';
       this.prefixcodeEditFlag = 'read-only';
-      this.depAccReadOnly = false;
+      this.depAccReadOnly = true;
       this.$emit('account-detail-value', this.depInfo);
     }
   },

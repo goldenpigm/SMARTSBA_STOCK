@@ -54,7 +54,7 @@
       </div>
       <div class="row m-0">
         <div :class="`form-group ${accountClass}`">
-          <ComboBox
+          <!-- <ComboBox
             :name="`${tagname}`"
             :id="`${tagid}`"
             :placeholder="'Account'"
@@ -70,7 +70,28 @@
             @open="toggleAccDialog"
             @change="onChange"
           >
-          </ComboBox>
+          </ComboBox> -->
+          <div style="display: flex">
+            <!-- <MaskedTextBox
+              :class="`form-control account ${requiredValue}`"
+              :placeholder="'Account'"
+              :mask="'000000-0'"
+              :value="accountDetail.account"
+              
+            ></MaskedTextBox> -->
+            <MaskedTextBox 
+              :placeholder="'Account'"
+              :mask="'000000-0'" 
+              :value="accountDetail.account" 
+              @change="onChange" 
+            ></MaskedTextBox>
+            <span class="k-clear-value acclk-clear" role="button" tabindex="-1" title="clear" @click="onClickClear">
+              <span class="k-icon k-i-x" role="presentation"></span>
+            </span>
+            <button class="k-button k-button-md k-icon-button k-button-solid k-button-solid-base k-input-button m-0 acclk-btn" aria-label="expand button" type="button" tabindex="-1" @click="toggleAccDialog">
+              <span class="k-icon k-i-caret-alt-down k-button-icon" role="presentation"></span>
+            </button>
+          </div>
           <small
             v-if="errorTextFlag.account"
             :id="`${tagid}HelpText`"
@@ -133,6 +154,7 @@ import axios from "axios";
 import AccountGrid from "./AccountGrid";
 import { ComboBox } from "@progress/kendo-vue-dropdowns";
 import { Dialog } from "@progress/kendo-vue-dialogs";
+import { MaskedTextBox } from '@progress/kendo-vue-inputs';
 
 export default {
   name: "AccountLookup",
@@ -140,6 +162,7 @@ export default {
     AccountGrid,
     ComboBox,
     Dialog,
+    MaskedTextBox
   },
   props: {
     tagid: {
@@ -225,6 +248,7 @@ export default {
       errorText: {
         account: "",
       },
+      
       requiredValue: "",
       customTitleBar: "accModalTitleBar",
       visibleAccDialog: false,
@@ -299,26 +323,18 @@ export default {
       this.accountDetail.account = accountItem.account;
       this.$emit("setAccountValue", this.accountDetail.account);
     },
+    onClickClear() {
+      this.accountDetail.account = '';
+      this.accountDetail.custname = '';
+      this.$emit("claerAccountDetail", this.accountDetail.account);
+    },
     onChange(event) {
-      // console.log('onChange', event);
-      if (event.value == null) {
-        this.accountDetail.custname = "";
-        this.$emit("claerAccountDetail");
+      const value = event.target.value;
+      if (this.accountDetail.account  !== value) {
+        this.accountDetail.account  = value;
       }
-      this.accountDetail.account = event.value;
-    },
-    onKeypress(event) {
-      this.toggleAccDialog();
-      // event = event ? event : window.event;
-      // var charCode = (event.which) ? event.which : event.keyCode;
-      // if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
-      //   event.preventDefault();
-      // } else {
-      //   return true;
-      // }
-    },
+    }
   },
-  wathch: {},
 };
 </script>
 
@@ -333,5 +349,14 @@ export default {
 
 .k-button-md {
   padding: 4px 8px !important;
+}
+
+
+.acclk-clear {
+  position: absolute;
+  z-index: 1;
+  right: 2.75em;
+  width: 24px;
+  height: 24px;
 }
 </style>

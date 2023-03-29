@@ -1,12 +1,26 @@
 <template>
   <div class="form-group" :class="purposeClass">
-    <label id="purpose_label" for="purpose" class="require">Purpose</label>
+    <label :id="`${purposeId}_label`" :for="`${purposeId}`" class="require">{{ purposeLabel }}</label>
     <DropDownList
+      :id="purposeId"
+      :name="purposeName"
       :data-items="lookupPurpose"
       :text-field="'purposeename'"
       :default-item="defaultItem"
+      :item-render="customItemRender"
+      :value-render="customValueRender"
       @change="onChange"
       >
+      <template v-slot:purposeItemRender="{ props }">
+        <PurposeItemRender 
+          :class="props.itemClass" 
+          :data-item="props.dataItem"
+          :index="props.index" 
+          @click="(event) => props.onClick(event)" />
+      </template>
+      <template v-slot:purposeValueRender="{ props }">
+        <PurposeValueRender :value="props.value" />
+      </template>
     </DropDownList>
     <small
       id="purposetHelpText"
@@ -20,13 +34,32 @@
 <script>
 import axios from "axios";
 import { DropDownList } from "@progress/kendo-vue-dropdowns";
+import PurposeItemRender from "./PurposeItemRender";
+import PurposeValueRender from "./PurposeValueRender";
 
 export default {
   name: "PurposeLookup",
   components: {
     DropDownList,
+    PurposeItemRender,
+    PurposeValueRender
   },
   props: {
+    purposeLabel: {
+      type: String,
+      required: true,
+      readonly: true,
+    },
+    purposeId: {
+      type: String,
+      required: true,
+      readonly: true,
+    },
+    purposeName: {
+      type: String,
+      required: true,
+      readonly: true,
+    },
     purposeClass: {
       type: String,
       required: true,
@@ -54,7 +87,8 @@ export default {
         purposetname: 'Choose one of the following',
         purposecode: '',
       },
-      customRender: "purposeRender",
+      customItemRender: "purposeItemRender",
+      customValueRender: "purposeValueRender",
 
       purposeValue: "",
       purposeTextField: "",
@@ -81,12 +115,11 @@ export default {
           console.log("ERROR : lookuppurpose");
           console.error("Request canceled", error);
         });
-      console.log(this.lookupPurpose);
       return this.lookupPurpose;
     },
     onChange(event) {
-      console.log(event);
       this.purposeValue = event.value;
+      this.$emit('purpose-value', this.purposeValue);
     },
   },
 };

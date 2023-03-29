@@ -29,7 +29,13 @@
                 </div>
               </div>
               <div class="col-sm-12 col-md-4 col-lg-4">
-                <PurposeLookup :purposeClass="'col-sm-12 col-md-6 col-lg-6 px-0'"></PurposeLookup>
+                <PurposeLookup
+                  :purposeLabel="'Purpose'"
+                  :purposeId="'purpose'"
+                  :purposeName="'purpose'"
+                  :purposeClass="'col-sm-12 col-md-6 col-lg-6 px-0'" 
+                  @purpose-value="purposeValue"
+                  ></PurposeLookup>
               </div>
             </div>
             <div class="row">
@@ -58,7 +64,7 @@
                 </div>
               </div>
               <div class="col-sm-12 col-md-4 col-lg-4">
-                <XDate :xdateClass="'col-sm-12 col-md-6 col-lg-6 px-0'"></XDate>
+                <XDate :xdateClass="'col-sm-12 col-md-6 col-lg-6 px-0'" @xdate-value="xdateValue"></XDate>
               </div>
             </div>
             <div class="row">
@@ -121,7 +127,7 @@
 
 <script>
 import XDate from "../XDate"
-import PurposeLookup from "../PurposeLookup"
+import PurposeLookup from "../purpose/PurposeLookup"
 
 export default {
   name: 'TransactionDetail',
@@ -129,5 +135,13 @@ export default {
     XDate,
     PurposeLookup,
   },
+  methods: {
+    purposeValue(value) {
+      console.log('purposeValue', value);
+    },
+    xdateValue(value) {
+      console.log('xdateValue', value);
+    }
+  }
 }
 </script>

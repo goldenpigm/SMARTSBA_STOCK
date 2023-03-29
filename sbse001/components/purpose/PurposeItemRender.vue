@@ -1,6 +1,6 @@
 <template>
   <li class="k-item" @click="handleClick">
-    <span>{{ dataItem.purposecode }} : {{ dataItem.purposeename }}</span>
+    <span class="">{{ dataItem.purposecode ? dataItem.purposecode + ' : ' : '' }} {{ dataItem.purposeename }}</span>
   </li>
 </template>
 <script>
