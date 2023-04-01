@@ -3,23 +3,20 @@
     <span class="">{{ dataItem.purposecode ? dataItem.purposecode + ' : ' : '' }} {{ dataItem.purposeename }}</span>
   </li>
 </template>
-<script>
-export default {
-  emits: {
-    click: null,
-  },
-  props: {
-    id: String,
-    index: Number,
-    dataItem: [Object, String],
-    textField: String,
-    focused: Boolean,
-    selected: Boolean,
-  },
-  methods: {
-    handleClick(event) {
-      this.$emit("click", event);
-    },
-  },
-};
+
+<script setup lang="ts">
+interface PurposeLookupProps {
+  id?: string,
+  index?: number
+  dataItem?: any
+  textField?: string,
+  focused?: boolean,
+  selected?: boolean,
+}
+const props = defineProps<PurposeLookupProps>();
+const emit = defineEmits(['click']);
+
+const handleClick = (event: any) => {
+  emit("click", event);
+}
 </script>

@@ -13,8 +13,12 @@
                   <span id="infosubprog" data-for="AboutProgram" class="nav-item dropdown"></span>
                 </h6>
                 <div class="content p-4 container">
-                  <AccountDetail :title="'ข้อมูลเลขที่บัญชีหลักทรัพย์ผู้ฝาก / Depositor’s Information'" @account-detail-value="accountDetailValue"/>
-                  <TransactionDetail />
+                  <AccountDetail 
+                    :title="'ข้อมูลเลขที่บัญชีหลักทรัพย์ผู้ฝาก / Depositor’s Information'"
+                    :mode="mode"
+                    :detailPage="detailPage" 
+                    @account-detail-value="accountDetailValue" />
+                  <TrandetailTransactionDetail />
                   <div id="CertificateDetail">
                     <div id="detail" class="container keyform-section">
                       <div class="row">
@@ -40,44 +44,63 @@
   </div>
 </template>
 
-<script>
-import axios from "axios";
-
-import AccountDetail from "@/components/account/AccountDetail"
-import TransactionDetail from "@/components/trandetail/TransactionDetail"
-
-export default {
-  name: 'SBSE001_INSERT',
-  components: {
-    AccountDetail,
-    TransactionDetail
+<script setup lang="ts">
+const mode = 'insert'
+// const accdetail = {
+//   account: 'test_account',
+//   depacc: 'test_depacc',
+//   cardid: 'test_cardid',
+//   prefixcode: 'test_prefixcode',
+//   prefixdesc: 'test_prefixdesc',
+//   custname: 'test_custname',
+//   test: 'test_test'
+// }
+const detailPage = {
+  account: {
+    label: 'เลขที่บัญชีหลักทรัพย์ / Account',
+    id: 'account',
+    name: 'account',
+    className: 'col-sm-12 col-md-4 col-lg-4 px-0',
+    require: true
   },
-  data() {
-    return {
-    }
+  depacc: {
+    label: 'Depository Account',
+    id: 'depository_account',
+    name: 'depository_account',
+    className: 'col-sm-12 col-md-4 col-lg-4 px-0',
+    require: true
   },
-  mounted() {
+  cardid: {
+    label: 'เลขประจำตัวประชาชน / Card ID',
+    id: 'cardid',
+    name: 'cardid',
+    className: 'col-sm-12 col-md-4 col-lg-4 px-0',
+    require: true
   },
-  methods: {
-    accountDetailValue(value) {
-      console.log('accountDetailValue', value);
-    }
+  prefixcode: {
+    label: 'รหัสคำนำหน้า / Prefix Code',
+    id: 'prefixcode',
+    name: 'prefixcode',
+    className: 'col-sm-12 col-md-4 col-lg-4 px-0',
+    require: true
   },
+  prefixdesc: {
+    label: 'คำนำหน้า / Prefix Desc.',
+    id: 'prefixdesc',
+    name: 'prefixdesc',
+    className: 'col-sm-12 col-md-4 col-lg-4 px-0',
+    require: true
+  },
+  custname: {
+    label: 'ชื่อ-นามสกุลของลูกค้า / Customer Name',
+    id: 'custname',
+    name: 'custname',
+    className: 'col-sm-12 col-md-4 col-lg-4 px-0',
+    require: true
+  }
 }
+
+const accountDetailValue = (value: object): void => {
+  console.log('accountDetailValue', value);
+};
 </script>
-
-<style>
-/* div#program_content {
-  height: auto;
-}
-
-input#regtsd {
-  position: absolute;
-}
-
-label#regtsd_label {
-  padding-left: 24px;
-  cursor: pointer;
-  width: fit-content;
-} */
-</style>

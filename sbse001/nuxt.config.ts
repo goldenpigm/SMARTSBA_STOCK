@@ -1,5 +1,8 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default {
+  devServer: {
+    port: 1235,
+  },
   app: {
     head: {
       title: "Customer Stock Deposit",

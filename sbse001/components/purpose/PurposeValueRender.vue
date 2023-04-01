@@ -6,10 +6,9 @@
     }">{{ value.purposecode ? value.purposecode + ' : ' : '' }} {{ value.purposeename }}</span>
   </span>
 </template>
-<script>
-export default {
-  props: {
-    value: Object
-  },
-}
+
+<script setup lang="ts">
+const props = defineProps<{
+  value: any
+}>();
 </script>

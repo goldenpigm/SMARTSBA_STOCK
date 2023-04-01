@@ -1,18 +1,94 @@
 <template>
   <div class="form-group " :class="xdateClass">
     <label id="xdate_label" for="xdate">X Date</label>
-    <DatePicker 
-      :id="'xdate'" 
-      :value="xdateValue" 
-      :format="'dd/MM/yyyy'" 
-      :disable-dates="disableDates"
-      :footer="false" 
-      @change="onChange"
-      :ref="'xdate'"></DatePicker>
+    <DatePicker :id="'xdate'" :value="xdateValue" :format="'dd/MM/yyyy'" :disable-dates="disableDates" :footer="false"
+      @change="onChange" :ref="'xdate'"></DatePicker>
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import axios from "axios";
+import { ref } from 'vue';
+import { DatePicker } from '@progress/kendo-dateinputs-vue-wrapper';
+
+const props = defineProps<{
+  xdateClass: string;
+}>();
+const emit = defineEmits(['xdate-value']);
+
+const fsLang = useRuntimeConfig().public.FS_LANG;
+const baseURLUtil = useRuntimeConfig().public.BASE_URL_UTIL;
+const headers = {
+  headers: {
+    'Content-Type': 'application/json',
+    'Microservice': 'false',
+    'Fs-Key': 'b17d681e-a827-45f8-bcce-6dff3c3a6eef',
+    'Fs-Track': 'kml2'
+  }
+}
+var xdatetDetail = ref({
+  xdate: ''
+});
+var errorTextFlag = ref({
+  xdate: false
+});
+var errorText = ref({
+  xdate: ''
+});
+var holidayLists = ref<Array<object>>([]);
+var xdateValue = ref<Date>(new Date()) // current
+
+onMounted(async () => {
+  holidayLists.value = await lookupCalendar();
+});
+
+const lookupCalendar = async (): Promise<Array<object>> => {
+  let holidayLists: Array<object> = [];
+  let data = {
+    'from_date': '',
+    'to_date': ''
+  }
+  await axios.post(`${baseURLUtil}/lookupcalendar/collect`, data, headers)
+    .then((result) => {
+      console.log("SUCCESS : lookupcalendar");
+      if (result.data.body.result == "Y") {
+        let holidaysDate = [];
+        for (let date of result.data.body.lists) {
+          if (date.holidaydate.trim()) {
+            let d = date.holidaydate.split("/");
+            holidaysDate.push(new Date(parseInt(d[2], 10), parseInt(d[1], 10) - 1, parseInt(d[0], 10)));
+          }
+        }
+        holidayLists = holidaysDate;
+      }
+    })
+    .catch((error) => {
+      console.log("ERROR : lookupcalendar");
+      console.error('Request canceled', error);
+    });
+  return holidayLists;
+}
+const disableDates = (date: Date): boolean => {
+  if (!date) return false;
+  if (date.getDay() == 6) return true;
+  if (date.getDay() == 0) return true;
+  let holiday: any;
+  for (holiday of holidayLists.value) {
+    if (holiday.getFullYear() == date.getFullYear() &&
+      holiday.getMonth() == date.getMonth() &&
+      holiday.getDate() == date.getDate()) {
+      return true
+    }
+  }
+  return false;
+}
+const onChange = (event: any): void => {
+  xdateValue.value = event.sender.value();
+  emit('xdate-value', xdateValue.value);
+}
+</script>
+
+<!-- <script>
 import axios from "axios";
 import { DatePicker } from '@progress/kendo-dateinputs-vue-wrapper';
 
@@ -55,8 +131,8 @@ export default {
     }
   },
   mounted() {
+    console.log(this.xdateValue);
     this.lookupCalendar();
-
   },
   computed: {
 
@@ -90,6 +166,7 @@ export default {
       return this.holidayLists;
     },
     disableDates(date) {
+      if(!date) return false;
       if (date.getDay() == 6) return true;
       if (date.getDay() == 0) return true;
       for (let holiday of this.holidayLists) {
@@ -108,4 +185,4 @@ export default {
   }
 }
 
-</script>
+</script> -->
